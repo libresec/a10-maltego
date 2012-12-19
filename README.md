@@ -13,7 +13,6 @@ Configuration that holds A10 username, password, and server information.
 
 Transforms
 --------------------
-'''
 maltego.IPv4Address (Entity)
 
 	a10_ip_to_user.py
@@ -21,7 +20,6 @@ maltego.IPv4Address (Entity)
 maltego.Person (Entity)
 
     a10_user_to_ip.py
-'''
 
 Dependencies 
 -------------
