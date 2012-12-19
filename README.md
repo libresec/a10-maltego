@@ -32,4 +32,4 @@ Addtionally, Netwitness's REST API must be enabled, it is not enabled by default
 Thanks
 -----------------
 Paterva (@Paterva)<br/>
-@bostonlink Thanks for nwmaltego and a starting point!
+@bostonlink -- Thanks for nwmaltego and a starting point!
