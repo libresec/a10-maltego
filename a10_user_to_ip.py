@@ -68,7 +68,6 @@ def buildMaltegoXML(user_ip, starttime, endtime, hostname):
 
 user = sys.argv[1]
 
-
 reqXML = a10maltego.a10xml("0", user, "False")
 
 a10Response = a10maltego.a10request(reqXML)
@@ -77,4 +76,5 @@ dom = parseString(a10Response)
 
 parseA10XML(dom)
 
-print "D:" + a10Response
+if DEBUG:
+    print "\nD: A10 Response-----\n" + a10Response + "\n-------"
