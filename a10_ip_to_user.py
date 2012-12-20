@@ -66,11 +66,10 @@ def buildMaltegoXML(usernames, starttime, endtime, hostname):
     print footer
 
 
-#ip = "10.36.140.59"
-
 ip = sys.argv[1]
 
 reqXML = a10maltego.a10xml(ip, "0", "False")
+
 a10Response = a10maltego.a10request(reqXML)
 
 dom = parseString(a10Response)
