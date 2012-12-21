@@ -5,7 +5,7 @@ DEBUG = 0
 
 def parseA10XML(xml):
     
-    user_activity_lists = xml.getElementsByTagName("user_activity")
+    user_activity_lists = xml.getElementsByTagName("user_activity_list")
  
     usernames = []
     starttime = []
