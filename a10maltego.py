@@ -1,39 +1,35 @@
 '''
-Created on Dec 11, 2012
-
 @author: libresec
 '''
 from xml.dom.minidom import Document, parseString
 import httplib, sys
 
-DEBUG = 0
-
-def a10xml(ipIn, userIn, endIn): #potential args --> ip, id, timeframes
+def a10xml(ipIn, userIn, endIn): 
 
     doc = Document()
     user = userIn
     ip = ipIn
+
+    try:
+            
+        #open config file to grab server, username, and password
+        conf = open('a10maltego.conf', 'r')
+        config = conf.readlines()
+        conf.close()
     
-    #open config file to grab server, username, and password
-    conf = open('a10maltego.conf', 'r')
-    config = conf.readlines()
-    conf.close()
-
-    for line in config:
-
-        try:
-
-            if 'USERNAME' in line:
-                usr_list = line.strip().split('=')
-                a10usr = str(usr_list[1]).lstrip("'").rstrip("'")
+        for line in config:
     
-            elif 'PASSWORD' in line:
-                passwd_list = line.strip().split('=')
-                a10pass = str(passwd_list[1]).lstrip("'").rstrip("'")
+    
+                if 'USERNAME' in line:
+                    usr_list = line.strip().split('=')
+                    a10usr = str(usr_list[1]).lstrip("'").rstrip("'")
+        
+                elif 'PASSWORD' in line:
+                    passwd_list = line.strip().split('=')
+                    a10pass = str(passwd_list[1]).lstrip("'").rstrip("'")
 
-        except:
-
-            return 'Authentication has failed to NW please check your netwitness.conf file'
+    except:
+        errors(3)
     
     #Create root element <IDSentrieServiceReq>
     IDSentrieServiceReq = doc.createElement("IDSentrieServiceReq")
@@ -95,41 +91,47 @@ def a10request(reqIn):
     
     data = reqIn
     
-#open config file to grab server
-    conf = open('a10maltego.conf', 'r')
-    config = conf.readlines()
-    conf.close()
+    try:
+        #open config file to grab server
+        conf = open('a10maltego.conf', 'r')
+        config = conf.readlines()
+        conf.close()
 
-    for line in config:
-
-        try:
+        for line in config:
+    
             if 'A10SERVER' in line:
                 conc_list = line.strip().split('=')
                 a10svr = str(conc_list[1]).lstrip("'").rstrip("'")
         
-        except:  
-            return 'Authentication has failed to NW please check your netwitness.conf file'
+    except:  
+        errors(3)
     
     try:
-        connection = httplib.HTTPSConnection(a10svr, timeout=60)
+        connection = httplib.HTTPSConnection(a10svr, timeout=20)
         connection.request("POST", "/xml/request", data)
         response = connection.getresponse()
         content = response.read()
         
-        if DEBUG:
-            print "--REQUEST--"
-            out = parseString(data)
-            print out.toprettyxml(indent='  ', encoding=None)
-            print "--RESPONSE--"
-            print content
-        
-        if len(content) != 0:
-            return (content)
-        else:
-            print "Nothing returned."
-            sys.exit(0)
+        return content
            
     except:
-        print a10svr
-        print "Network connection is borked or A10 is not responding. 134"
-        sys.exit(0)   
+        errors(1)
+        
+def errors(typeIn):
+    
+    if typeIn == 1:
+        text = "Network connection is down or A10 is not responding."
+    elif typeIn == 2:
+        text = "A10 did not return any results. Check your input."
+    elif typeIn == 3:
+        text = "Something is wrong with your a10maltego.conf file."
+            
+    print "<MaltegoMessage>\n<MaltegoTransformResponseMessage>"
+    print "   <Entities>"
+    print "   </Entities>"
+    print "   <UIMessages>"
+    print "       <UIMessage MessageType=\"PartialError\">%s</UIMessage>" % text
+    print "   </UIMessages>"
+    print "</MaltegoTransformResponseMessage>\n</MaltegoMessage>"
+    
+    sys.exit(0)         

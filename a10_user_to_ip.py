@@ -1,7 +1,9 @@
+'''
+@author: libresec
+'''
+
 import a10maltego, sys
 from xml.dom.minidom import parseString
-
-DEBUG = 0
 
 def parseA10XML(xml):
     
@@ -43,28 +45,33 @@ def parseA10XML(xml):
 
 def buildMaltegoXML(user_ip, starttime, endtime, hostname):
     
-    header="""<MaltegoMessage>
-    <MaltegoTransformResponseMessage>
-        <Entities>"""
-        
-    print header
+    if user_ip == []:
+        a10maltego.errors(2)
     
-    for idx, ip in enumerate(user_ip):
-        print"""            <Entity Type='maltego.IPv4Address'>
-                    <Value>%s</Value>""" %(ip)
-        print"""                    <DisplayInformation>"""
-        print"""                        <Label Name="Start Time" Type="text/plain">%s</Label>""" %(starttime[idx])
-        print"""                        <Label Name="End Time" Type="text/plain">%s</Label>""" %(endtime[idx])
-        print"""                        <Label Name="Hostname" Type="text/plain">%s</Label>""" % (hostname[idx])
-        print"""                    </DisplayInformation>"""
-        print"""           </Entity>""" 
-                
+    else:
+        
+        header="""<MaltegoMessage>
+        <MaltegoTransformResponseMessage>
+            <Entities>"""
             
-    footer="""        </Entities>
-    </MaltegoTransformResponseMessage> 
-</MaltegoMessage>"""
-
-    print footer
+        print header
+        
+        for idx, ip in enumerate(user_ip):
+            print"""            <Entity Type='maltego.IPv4Address'>
+                        <Value>%s</Value>""" %(ip)
+            print"""                    <DisplayInformation>"""
+            print"""                        <Label Name="Start Time" Type="text/plain">%s</Label>""" %(starttime[idx])
+            print"""                        <Label Name="End Time" Type="text/plain">%s</Label>""" %(endtime[idx])
+            print"""                        <Label Name="Hostname" Type="text/plain">%s</Label>""" % (hostname[idx])
+            print"""                    </DisplayInformation>"""
+            print"""           </Entity>""" 
+                    
+                
+        footer="""        </Entities>
+        </MaltegoTransformResponseMessage> 
+    </MaltegoMessage>"""
+    
+        print footer
 
 user = sys.argv[1]
 
@@ -75,6 +82,3 @@ a10Response = a10maltego.a10request(reqXML)
 dom = parseString(a10Response)
 
 parseA10XML(dom)
-
-if DEBUG:
-    print "\nD: A10 Response-----\n" + a10Response + "\n-------"
