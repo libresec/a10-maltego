@@ -28,4 +28,5 @@ These transforms have been tested in Mac OSX using Python 2.7.
 Thanks
 -----------------
 Paterva (@Paterva)<br/>
-@bostonlink -- Thanks for nwmaltego and a starting point!
+@bostonlink -- Thanks for nwmaltego and a starting point!<br/>
+@ph1lv -- Thanks for the ideas!
