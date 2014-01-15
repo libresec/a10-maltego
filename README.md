@@ -1,7 +1,11 @@
+# About 
 a10Maltego
-==========
 These Maltego transforms can be used to query A10 Networks IDsentrie. 
 
+# Notes
+This will be rewritten in the near future.
+
+# Transforms
 a10Maltego.py 
 ----------------
 Module that handles communications A10.
